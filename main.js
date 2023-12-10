@@ -2,7 +2,7 @@ const todoList = document.querySelector('.todo-list-ul');
 const emptyContent = document.querySelector('.empty-content');
 const count = document.getElementById('count');
 const dlist = todoList.children;
-console.log(dlist)
+
 const dragList = []
 let counter = 0;
 const emptyTodo = document.getElementById('empty-todo');
@@ -18,15 +18,9 @@ function app() {
     const mobileLinks = document.querySelector('.mobile-links');
     const searchInput = document.querySelector('.search-input')
     const checkButton = document.querySelector('.check-button');
-    console.log(dlist)
-    Array.from(dlist).forEach(draggable => {
-        draggable.addEventListener('click', () => console.log('click'));
-    });
+    let draggedItem = null;
 
-    // Array.from(dragList).forEach(draggable => {
-    //     draggable.addEventListener('click', () => console.log('dragstart'));
-    // });
-
+   
     
 
     
@@ -199,15 +193,17 @@ function app() {
     darkmodeButton.addEventListener('click', lightModeToggleHandler)
 
     const createTodoList = () => {
-      
+
+        
         if (searchInput.value.length > 1) {
             // emptyTodo.classList.add('hidden')
             emptyTodo.style.display = 'none';
             const todoItem = document.createElement('li');
-            todoItem.id = 'lists'
+            todoItem.id = 'lists';
+            todoItem.classList.add('draggable')
             todoItem.setAttribute('draggable', 'true');
             dragList.push(todoItem)
-            console.log(dragList)
+           
             // Get the current value of the input
             let inputValue = searchInput.value;
 
@@ -217,7 +213,7 @@ function app() {
             // Set the modified value back to the input
             searchInput.value = inputValue;
 
-            
+           
             
             counter = todoList.children.length;
 
@@ -225,8 +221,33 @@ function app() {
             
             todoItem.innerHTML = `<span><button class='check' onclick='checkHandler(event)'>
     <img src="./images/icon-check.svg" alt="" class='hidden' id='checks' onclick='check2Handler(event)'>
-  </button> <p>${searchInput.value}</p> </span> <button id='remove-todo' onclick="removeTask(this)"><img src='./images/icon-cross.svg'></button>`
-            // todoItem.classList.add('todo-item');
+  </button> <p>${searchInput.value}</p> </span> <button id='remove-todo' onclick="removeTask(this)"><img src='./images/icon-cross.svg'></button>`;
+
+            // todoItem.addEventListener('dragstart', (e) => {
+            //     // e.dataTransfer.effectAllowed = 'move';
+            //     // e.dataTransfer.setData('text/plain', null);
+            //     const elem = e.target;
+            //     elem.classList.add('dragging')
+            // });
+            // todoItem.addEventListener('dragend', e => {
+            //     const elem = e.target;
+            //     elem.classList.remove('dragging')
+            // });
+            // todoList.addEventListener('dragover', e => {
+            //     e.preventDefault();
+            //     const afterElements = getDragAfterElement(todoList, e.clientY)
+            //     const draggable = document.querySelector('.dragging');
+            //     todoList.appendChild(draggable)
+            // })
+            // function getDragAfterElement(container, y) {
+            //     const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            //     // draggableElements.reduce((closest, child) => {
+
+            //     // }, {offset: Number.POSITIVE_INFINITY})
+            // }
+
+
+           
             todoList.prepend(todoItem);
             searchInput.value = ''
         }
@@ -251,8 +272,7 @@ function app() {
 app()
 
 function removeTask(button) {
-    const numOfArr = document.querySelectorAll('.activated').length;
-    // Remove the task item when the "Remove" button is clicked
+
     const taskItem = button.parentNode;
     taskItem.parentNode.removeChild(taskItem);
     if (!taskItem.classList.contains('.activated')) {
@@ -407,6 +427,35 @@ function check2Handler(e) {
 //     draggedItem.classList.remove('dragged');
 //     draggedItem = null;
 // }
+// let draggedItem = null;
+
+// document.addEventListener('dragstart', function (event) {
+//     draggedItem = event.target;
+//     event.dataTransfer.setData('text/plain', ''); // Required for Firefox
+//     setTimeout(function () {
+//         event.target.classList.add('dragged');
+//     }, 0);
+// });
+
+// document.addEventListener('dragover', function (event) {
+//     event.preventDefault();
+// });
+
+// document.addEventListener('drop', function (event) {
+//     event.preventDefault();
+//     const dropTarget = event.target;
+
+//     if (dropTarget.tagName === 'LI') {
+//         const list = dropTarget.parentNode;
+//         const dropIndex = Array.from(list.children).indexOf(dropTarget);
+//         const draggedIndex = Array.from(list.children).indexOf(draggedItem);
+
+//         list.insertBefore(draggedItem, dropIndex > draggedIndex ? dropTarget.nextSibling : dropTarget);
+//     }
+
+//     draggedItem.classList.remove('dragged');
+//     draggedItem = null;
+// });
 let draggedItem = null;
 
 document.addEventListener('dragstart', function (event) {
@@ -436,3 +485,50 @@ document.addEventListener('drop', function (event) {
     draggedItem.classList.remove('dragged');
     draggedItem = null;
 });
+
+// Add touch event listeners
+document.addEventListener('touchstart', function (event) {
+    handleTouchStart(event);
+}, false);
+
+document.addEventListener('touchmove', function (event) {
+    handleTouchMove(event);
+}, false);
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+function handleTouchStart(event) {
+    const firstTouch = event.touches[0];
+    touchStartX = firstTouch.clientX;
+    touchStartY = firstTouch.clientY;
+}
+
+function handleTouchMove(event) {
+    if (!touchStartX || !touchStartY) {
+        return;
+    }
+
+    const touchX = event.touches[0].clientX;
+    const touchY = event.touches[0].clientY;
+
+    const deltaX = touchX - touchStartX;
+    const deltaY = touchY - touchStartY;
+
+    if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+        // Detect a significant drag
+        simulateDragStart(event);
+        touchStartX = 0;
+        touchStartY = 0;
+    }
+}
+
+function simulateDragStart(event) {
+    // Your logic for simulating drag start on touch
+    const targetElement = document.elementFromPoint(touchStartX, touchStartY);
+    if (targetElement) {
+        draggedItem = targetElement;
+        targetElement.classList.add('dragged');
+        event.preventDefault(); // Prevent default touchmove behavior
+    }
+}

@@ -56,7 +56,9 @@ body.active {
 body.active::after {
         background-image: url('./images/bg-desktop-light.jpg');
 }
- 
+.dragging {
+    opacity: 0.5;
+}
 header nav {
     height: 100%;
     display: flex;
@@ -357,7 +359,7 @@ footer {
 }
 @keyframes append {
     from{
-        transform: translateY(-30px);
+        transform: translateY(-20px);
     } to {
        transform: translateY(0);
     }
