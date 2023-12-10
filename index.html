@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  
+  <title>Taskaroo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,400;0,700;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./default.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./main.js" defer></script>
+</head>
+<body>
+<header>
+  
+  <h1 id="h1">TODO</h1>
+  <button id="darkmode-button">
+    
+  <img src="./images/icon-sun.svg" alt="sun icon" id="sun">
+  <img src="./images/icon-moon.svg" alt="sun icon" class="hidden" id="moon">
+  </button>
+</header>
+<div class="todo-input " >
+  <input type="text" placeholder="Create a new todo..." class="search-input" maxlength="30">
+  <button class="check-button">
+    <img src="./images/icon-check.svg" alt="" class="check hidden">
+  </button>
+  <!-- <input type="checkbox" name="" id="checkbox"> -->
+  <!-- ondragstart="dragStart(event)" ondragover="allowDrop(event)" ondrop="drop(event)" -->
+</div>
+<div class="todo-list">
+  <ul class="todo-list-ul" >
+    <li class="empty-todo" id="empty-todo">
+      No <strong class="empty-content">active</strong> task 
+    </li>
+    
+  </ul>
+  <div class="todo-list-footer">
+    <h6 id="h6">
+        <strong id="count">0</strong> items left
+      </h6>
+      <span>
+        <button class="all active-link" id="all">All</button>
+        <button class="active">Active</button>
+        <button class="completed">Completed</button>
+      </span>
+      <button class="clear-completed">Clear Completed</button>
+  </div>
+ 
+</div>
+ <div class="mobile-links">
+       <button class="all active-link" id="all">All</button>
+        <button class="active">Active</button>
+        <button class="completed">Completed</button>
+  </div>
+  <footer>
+    Drag and drop to reorder list
+  </footer>
+</body>
+</html>
